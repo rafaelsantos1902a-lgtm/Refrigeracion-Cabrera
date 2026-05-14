@@ -11,7 +11,7 @@
 import { useState, FormEvent, ChangeEvent, useEffect } from "react";
 
 // URL del Webhook (Configurar en Make.com u otro servicio)
-const WEBHOOK_URL = "https://hook.us2.make.com/65emfuzyqph25z82ejif3las1icic1tq";
+const WEBHOOK_URL = "https://hook.us2.make.com/hyjwp5tzn3t8uuat3643q3yhgxrzlcx4";
 
 interface MaterialItem {
   nombre: string;
