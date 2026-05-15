@@ -23,6 +23,8 @@ interface MaterialItem {
 interface QuoteData {
   nombreCliente: string;
   whatsappCliente: string;
+  direccionCliente: string;
+  detallesTecnicos: string;
   tipoServicio: string;
   materiales: MaterialItem[];
   costoManoObra: number;
@@ -66,16 +68,36 @@ const Snowfall = () => {
   );
 };
 
+const MATERIAL_OPTIONS = [
+  "Compresor (1 HP, 2 HP, 5 HP)",
+  "Gas Refrigerante R404A (libra)",
+  "Gas Refrigerante R22 (libra)",
+  "Gas Refrigerante R410A (libra)",
+  "Evaporador / Difusor",
+  "Unidad Condensadora",
+  "Filtro Deshidratador",
+  "Válvula de Expansión",
+  "Tubería de Cobre (varios diámetros)",
+  "Aislante Térmico (Rubatex)",
+  "Termostato Digital / Controlador (ej. Full Gauge / Danfoss)",
+  "Contactor Eléctrico",
+  "Breaker / Protector de Voltaje",
+  "Soldadura de Plata (varilla)",
+  "Filtro de Succión",
+];
+
 export default function App() {
   const [clientData, setClientData] = useState({
     nombreCliente: "",
     whatsappCliente: "",
+    direccionCliente: "",
+    detallesTecnicos: "",
     tipoServicio: "Instalación",
     costoManoObra: 0,
   });
 
   const [currentMaterial, setCurrentMaterial] = useState({
-    nombre: "Gas R22",
+    nombre: "",
     cantidad: 1,
     costo: 0,
   });
@@ -83,7 +105,7 @@ export default function App() {
   const [materialsList, setMaterialsList] = useState<MaterialItem[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const handleClientChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleClientChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setClientData(prev => ({
       ...prev,
@@ -91,7 +113,7 @@ export default function App() {
     }));
   };
 
-  const handleMaterialChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleMaterialChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setCurrentMaterial(prev => ({
       ...prev,
@@ -101,6 +123,10 @@ export default function App() {
 
   const addMaterial = (e: FormEvent) => {
     e.preventDefault();
+    if (!currentMaterial.nombre.trim()) {
+      alert("Por favor ingrese el nombre del material");
+      return;
+    }
     if (currentMaterial.costo <= 0) {
       alert("Por favor ingrese un costo válido");
       return;
@@ -112,7 +138,7 @@ export default function App() {
     setMaterialsList(prev => [...prev, newItem]);
     // Reset material fields
     setCurrentMaterial({
-      nombre: "Gas R22",
+      nombre: "",
       cantidad: 1,
       costo: 0,
     });
@@ -173,12 +199,14 @@ export default function App() {
     setClientData({
       nombreCliente: "",
       whatsappCliente: "",
+      direccionCliente: "",
+      detallesTecnicos: "",
       tipoServicio: "Instalación",
       costoManoObra: 0,
     });
     setMaterialsList([]);
     setCurrentMaterial({
-      nombre: "Gas R22",
+      nombre: "",
       cantidad: 1,
       costo: 0,
     });
@@ -240,6 +268,36 @@ export default function App() {
 
             <div className="group space-y-1.5">
               <label className="text-[10px] uppercase font-bold text-blue-300 tracking-widest block">
+                Dirección del Cliente
+              </label>
+              <input
+                required
+                type="text"
+                name="direccionCliente"
+                value={clientData.direccionCliente}
+                onChange={handleClientChange}
+                placeholder="Calle, Sector, Ciudad"
+                className="w-full bg-blue-950/40 border border-blue-400/20 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-all placeholder:text-blue-700 text-blue-100 shadow-inner"
+              />
+            </div>
+
+            <div className="group space-y-1.5">
+              <label className="text-[10px] uppercase font-bold text-blue-300 tracking-widest block">
+                Detalles Técnicos del Servicio
+              </label>
+              <textarea
+                required
+                name="detallesTecnicos"
+                value={clientData.detallesTecnicos}
+                onChange={handleClientChange}
+                placeholder="Escribe aquí los detalles del servicio..."
+                rows={3}
+                className="w-full bg-blue-950/40 border border-blue-400/20 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-all placeholder:text-blue-700 text-blue-100 shadow-inner resize-none"
+              />
+            </div>
+
+            <div className="group space-y-1.5">
+              <label className="text-[10px] uppercase font-bold text-blue-300 tracking-widest block">
                 Tipo de Servicio
               </label>
               <select
@@ -264,17 +322,19 @@ export default function App() {
               <label className="text-[10px] uppercase font-bold text-blue-300 tracking-widest block">
                 Material
               </label>
-              <select
+              <input
+                list="material-list"
                 name="nombre"
                 value={currentMaterial.nombre}
                 onChange={handleMaterialChange}
-                className="w-full bg-blue-950/40 border border-blue-400/20 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-all appearance-none cursor-pointer text-blue-100 shadow-inner"
-              >
-                <option className="bg-[#020617]" value="Gas R22">Gas R22</option>
-                <option className="bg-[#020617]" value="Tubería de Cobre">Tubería de Cobre</option>
-                <option className="bg-[#020617]" value="Soldadura">Soldadura</option>
-                <option className="bg-[#020617]" value="Filtros">Filtros</option>
-              </select>
+                placeholder="Seleccione o escriba el material"
+                className="w-full bg-blue-950/40 border border-blue-400/20 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-all text-blue-100 shadow-inner"
+              />
+              <datalist id="material-list">
+                {MATERIAL_OPTIONS.map((option) => (
+                  <option key={option} value={option} />
+                ))}
+              </datalist>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
