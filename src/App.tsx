@@ -26,6 +26,7 @@ interface QuoteData {
   direccionCliente: string;
   detallesTecnicos: string;
   tipoServicio: string;
+  tipo_documento: string;
   materiales: MaterialItem[];
   costoManoObra: number;
   totalGeneral: number;
@@ -93,6 +94,7 @@ export default function App() {
     direccionCliente: "",
     detallesTecnicos: "",
     tipoServicio: "Instalación",
+    tipo_documento: "Cotización",
     costoManoObra: 0,
   });
 
@@ -205,6 +207,7 @@ export default function App() {
       direccionCliente: "",
       detallesTecnicos: "",
       tipoServicio: "Instalación",
+      tipo_documento: "Cotización",
       costoManoObra: 0,
     });
     setMaterialsList([]);
@@ -350,6 +353,7 @@ export default function App() {
                   name="cantidad"
                   value={currentMaterial.cantidad}
                   onChange={handleMaterialChange}
+                  onFocus={(e) => e.target.select()}
                   min="1"
                   className="w-full bg-blue-950/40 border border-blue-400/20 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 text-blue-100 shadow-inner"
                 />
@@ -364,6 +368,7 @@ export default function App() {
                     name="costo"
                     value={currentMaterial.costo}
                     onChange={handleMaterialChange}
+                    onFocus={(e) => e.target.select()}
                     min="0"
                     className="w-full bg-blue-950/40 border border-blue-400/20 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 text-blue-100 pr-10 shadow-inner"
                   />
@@ -418,6 +423,7 @@ export default function App() {
                   name="costoManoObra"
                   value={clientData.costoManoObra}
                   onChange={handleClientChange}
+                  onFocus={(e) => e.target.select()}
                   min="0"
                   className="w-full bg-blue-950/40 border border-blue-400/20 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 text-blue-100 pr-12 shadow-inner"
                 />
@@ -432,6 +438,21 @@ export default function App() {
               </p>
             </div>
           </section>
+
+          <div className="group space-y-1.5">
+            <label className="text-[10px] uppercase font-bold text-blue-300 tracking-widest block">
+              Tipo de Documento
+            </label>
+            <select
+              name="tipo_documento"
+              value={clientData.tipo_documento}
+              onChange={handleClientChange}
+              className="w-full bg-blue-950/40 border border-blue-400/20 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-all appearance-none cursor-pointer text-blue-100 shadow-inner"
+            >
+              <option className="bg-[#020617]" value="Cotización">Cotización</option>
+              <option className="bg-[#020617]" value="Factura">Factura</option>
+            </select>
+          </div>
 
           <button
             disabled={loading}
