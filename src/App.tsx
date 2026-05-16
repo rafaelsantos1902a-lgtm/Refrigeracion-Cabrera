@@ -161,18 +161,20 @@ export default function App() {
     }
     setLoading(true);
 
+    const { nombreCliente, whatsappCliente, direccionCliente, detallesTecnicos, tipoServicio, tipo_documento, costoManoObra } = clientData;
+
     const payload: QuoteData = {
-      nombreCliente: clientData.nombreCliente,
-      whatsappCliente: clientData.whatsappCliente,
-      direccionCliente: clientData.direccionCliente,
-      detallesTecnicos: clientData.detallesTecnicos,
-      tipoServicio: clientData.tipoServicio,
-      tipo_documento: clientData.tipo_documento,
+      nombreCliente,
+      whatsappCliente,
+      direccionCliente,
+      detallesTecnicos,
+      tipoServicio,
+      tipo_documento,
       materiales: materialsList.map(item => ({
         ...item,
         nombre: `${item.cantidad} x ${item.nombre}`
       })),
-      costoManoObra: clientData.costoManoObra,
+      costoManoObra,
       totalGeneral: totalGeneral,
       fecha: new Date().toISOString(),
     };
@@ -465,7 +467,7 @@ export default function App() {
             onClick={handleSubmit}
             className="w-full bg-blue-500 text-white font-black py-5 rounded-2xl hover:bg-blue-400 transition-all text-sm tracking-widest uppercase disabled:opacity-50 active:scale-[0.98] shadow-[0_0_30px_rgba(59,130,246,0.4)] border border-blue-300/30"
           >
-            {loading ? "Generando..." : "Realizar Cotización"}
+            {loading ? "Generando..." : clientData.tipo_documento === "Factura" ? "GENERAR FACTURA" : "GENERAR COTIZACIÓN"}
           </button>
         </form>
       </main>
