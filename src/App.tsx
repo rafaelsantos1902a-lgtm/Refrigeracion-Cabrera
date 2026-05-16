@@ -161,7 +161,10 @@ export default function App() {
 
     const payload: QuoteData = {
       ...clientData,
-      materiales: materialsList,
+      materiales: materialsList.map(item => ({
+        ...item,
+        nombre: `${item.cantidad} x ${item.nombre}`
+      })),
       totalGeneral: totalGeneral,
       fecha: new Date().toISOString(),
     };
