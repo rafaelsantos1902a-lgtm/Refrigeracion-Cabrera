@@ -162,11 +162,17 @@ export default function App() {
     setLoading(true);
 
     const payload: QuoteData = {
-      ...clientData,
+      nombreCliente: clientData.nombreCliente,
+      whatsappCliente: clientData.whatsappCliente,
+      direccionCliente: clientData.direccionCliente,
+      detallesTecnicos: clientData.detallesTecnicos,
+      tipoServicio: clientData.tipoServicio,
+      tipo_documento: clientData.tipo_documento,
       materiales: materialsList.map(item => ({
         ...item,
         nombre: `${item.cantidad} x ${item.nombre}`
       })),
+      costoManoObra: clientData.costoManoObra,
       totalGeneral: totalGeneral,
       fecha: new Date().toISOString(),
     };
